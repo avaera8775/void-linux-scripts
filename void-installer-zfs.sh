@@ -19,8 +19,14 @@ ask "Enter boot disk (e.g. /dev/sda or /dev/nvme0n1)" BOOT_DISK
 ask "Enter boot partition number (e.g. 1)" BOOT_PART
 ask "Enter pool disk (same as boot disk if single)" POOL_DISK
 ask "Enter pool partition number (e.g. 2)" POOL_PART
-BOOT_DEVICE="${BOOT_DISK}${BOOT_PART}"
-POOL_DEVICE="${POOL_DISK}${POOL_PART}"
+
+if [[ "$BOOT_DISK" =~ nvme ]]; then
+  BOOT_DEVICE="${BOOT_DISK}p${BOOT_PART}"
+  POOL_DEVICE="${POOL_DISK}p${POOL_PART}"
+else
+  BOOT_DEVICE="${BOOT_DISK}${BOOT_PART}"
+  POOL_DEVICE="${POOL_DISK}${POOL_PART}"
+fi
 
 log "You chose:"
 echo "  Boot: $BOOT_DEVICE"
